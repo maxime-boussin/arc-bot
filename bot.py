@@ -10,7 +10,7 @@ import os
 import re
 import subprocess
 from flask import Flask
-from threading import Thread
+import threading
 
 app = Flask(__name__)
 
@@ -34,9 +34,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @app.route('/')
 def home():
     return "Le bot est en ligne !"
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=os.getenv("PORT"))
 
 @bot.event
 async def on_ready():
@@ -178,4 +175,10 @@ def update_json(players, winner, table):
 
     return [[player1, player2], message]
 
-bot.run(DISCORD_TOKEN)
+
+def run_flask():
+    app.run(host="0.0.0.0", port=os.getenv("PORT"))
+
+if __name__ == "__main__":
+    threading.Thread(target=run_flask, daemon=True).start()
+    asyncio.run(bot.start(DISCORD_TOKEN))
