@@ -1,5 +1,4 @@
 import discord
-import requests
 from bs4 import BeautifulSoup
 from discord.ext import commands
 import asyncio
@@ -8,9 +7,11 @@ from git import Repo
 import json
 import os
 import re
-import subprocess
 from flask import Flask
 import threading
+import requests
+import time
+import subprocess
 
 app = Flask(__name__)
 
@@ -179,6 +180,16 @@ def update_json(players, winner, table):
 def run_flask():
     app.run(host="0.0.0.0", port=os.getenv("PORT"))
 
+def keep_awake():
+    while True:
+        try:
+            requests.get("https://arc-bot.onrender.com")
+            print("Ping envoyé à l'application")
+        except Exception as e:
+            print("Erreur lors du ping :", e)
+        time.sleep(300)
+
 if __name__ == "__main__":
     threading.Thread(target=run_flask, daemon=True).start()
+    threading.Thread(target=keep_awake, daemon=True).start()
     asyncio.run(bot.start(DISCORD_TOKEN))
