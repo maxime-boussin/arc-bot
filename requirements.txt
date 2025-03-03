@@ -1,0 +1,7 @@
+discord.py
+requests
+beautifulsoup4
+discord-ext-commands
+asyncio
+playwright
+gitpython
