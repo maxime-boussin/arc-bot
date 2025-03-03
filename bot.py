@@ -16,7 +16,7 @@ GITHUB_EMAIL = "masquime.35@gmail.com"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GITHUB_REPO_URL = f"https://{GITHUB_TOKEN}@github.com/maxime-boussin/Altered-Rennes-Cup.git"
-
+print("Démarrage...")
 # Activer les intents
 intents = discord.Intents.default()
 intents.message_content = True
