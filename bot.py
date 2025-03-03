@@ -9,6 +9,10 @@ import json
 import os
 import re
 import subprocess
+from flask import Flask
+from threading import Thread
+
+app = Flask(__name__)
 
 LOCAL_PATH = "tmp/Altered-Rennes-Cup"
 GITHUB_USER = "altered-rennes-cup"
@@ -25,6 +29,13 @@ os.environ["GIT_ASKPASS"] = "echo"
 os.environ["GIT_TERMINAL_PROMPT"] = "0"
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+
+@app.route('/')
+def home():
+    return "Le bot est en ligne !"
+
+def run():
+    app.run(host="0.0.0.0", port=8080)
 
 @bot.event
 async def on_ready():
