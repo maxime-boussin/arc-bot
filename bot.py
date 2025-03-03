@@ -20,6 +20,7 @@ GITHUB_EMAIL = "masquime.35@gmail.com"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GITHUB_REPO_URL = f"https://{GITHUB_TOKEN}@github.com/maxime-boussin/Altered-Rennes-Cup.git"
+
 print("Démarrage...")
 # Activer les intents
 intents = discord.Intents.default()
@@ -34,7 +35,7 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 def home():
     return "Le bot est en ligne !"
 
-def run():
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=os.getenv("PORT"))
 
 @bot.event
