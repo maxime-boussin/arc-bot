@@ -22,7 +22,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 GITHUB_REPO_URL = f"https://{GITHUB_TOKEN}@github.com/maxime-boussin/Altered-Rennes-Cup.git"
 
-print("Démarrage...")
+print("Démarrage...", flush=True)
 # Activer les intents
 intents = discord.Intents.default()
 intents.message_content = True
@@ -38,7 +38,7 @@ def home():
 
 @bot.event
 async def on_ready():
-    print(f"Connecté en tant que {bot.user}")
+    print(f"Connecté en tant que {bot.user}", flush=True)
 
 @bot.command()
 async def match(ctx, url: str):
@@ -170,9 +170,9 @@ def update_json(players, winner, table):
         repo.git.add(json_tournament.replace("\\", "/").replace("tmp/Altered-Rennes-Cup/", ""))
         repo.index.commit("📊 Mise à jour automatique des scores via bot Discord 🤖")
         repo.git.push(GITHUB_REPO_URL, "main")
-        print("commit et pushed")
+        print("commit et pushed", flush=True)
     else:
-        print(f"rien à commit")
+        print(f"Rien à commit", flush=True)
 
     return [[player1, player2], message]
 
@@ -184,9 +184,9 @@ def keep_awake():
     while True:
         try:
             requests.get("https://arc-bot.onrender.com")
-            print("Ping envoyé à l'application")
+            print("Ping envoyé à l'application", flush=True)
         except Exception as e:
-            print("Erreur lors du ping :", e)
+            print("Erreur lors du ping :", e, flush=True)
         time.sleep(300)
 
 if __name__ == "__main__":
