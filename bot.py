@@ -44,7 +44,7 @@ async def on_ready():
 async def match(ctx, url: str):
     print(f"Commande reçu: !match {url}", flush=True)
     message = await scrapeBga(url)
-    print(f"Message: {message}", flush=True)
+    await print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 @bot.command()
@@ -52,7 +52,7 @@ async def matchIRL(ctx, player1: str, player2: str, winner: int):
     print(f"Commande reçu: !matchIRL {player1} {player2} {winner}", flush=True)
     winner = winner - 1
     message = await setMatch([player1, player2], winner)
-    print(f"Message: {message}", flush=True)
+    await print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 async def scrapeBga(url):
@@ -68,7 +68,7 @@ async def scrapeBga(url):
         await page.goto(url)
         await page.wait_for_selector(".game_result", timeout=30000)
         html_content = await page.content()
-
+        print(f"Page web chargée", flush=True)
         soup = BeautifulSoup(html_content, "html.parser")
         game_result = soup.select_one(".game_result")
 
@@ -78,6 +78,7 @@ async def scrapeBga(url):
             players_obj = update_json([players[0].get_text(), players[1].get_text()], players[0].get_text() if rank == "1" else players[1].get_text(), table)
             if players_obj[0][0] == None:
                 await browser.close()
+                print(f"Page web fermée", flush=True)
                 return players_obj[1]
             winner = players_obj[0][0] if rank == "1" else players_obj[0][1]
             message = f"{players_obj[0][0]['name']} :crossed_swords: {players_obj[0][1]['name']}\n"
@@ -85,6 +86,7 @@ async def scrapeBga(url):
         else:
             message = "Match introuvable. :question:"
         await browser.close()
+        print(f"Page web fermée", flush=True)
         return message
 
 async def setMatch(players, win):
