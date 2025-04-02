@@ -44,7 +44,6 @@ async def on_ready():
 async def match(ctx, url: str):
     print(f"Commande reçu: !match {url}", flush=True)
     message = await scrapeBga(url)
-    await print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 @bot.command()
@@ -52,7 +51,6 @@ async def matchIRL(ctx, player1: str, player2: str, winner: int):
     print(f"Commande reçu: !matchIRL {player1} {player2} {winner}", flush=True)
     winner = winner - 1
     message = await setMatch([player1, player2], winner)
-    await print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 async def scrapeBga(url):
@@ -87,12 +85,14 @@ async def scrapeBga(url):
             message = "Match introuvable. :question:"
         await browser.close()
         print(f"Page web fermée", flush=True)
+        print(f"Message: {message}", flush=True)
         return message
 
 async def setMatch(players, win):
     res = update_json(players, players[win], "x")[1]
     message = f"{players[0]} :crossed_swords: {players[1]}\n"
     message += f"**Gagnant:** {players[win]}\n{res}"
+    print(f"Message: {message}", flush=True)
     return message
 
 def update_json(players, winner, table):
