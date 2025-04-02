@@ -94,6 +94,7 @@ def update_json(players, winner, table):
     # Cloner le repo si ce n'est pas déjà fait
     if not os.path.exists(LOCAL_PATH):
         Repo.clone_from(GITHUB_REPO_URL, LOCAL_PATH)
+        print(f"Repo git cloné", flush=True)
     repo = Repo(LOCAL_PATH)
     origin = repo.remotes.origin
     origin.pull()
@@ -103,6 +104,7 @@ def update_json(players, winner, table):
     with open(json_info, "r", encoding="utf-8") as f:
         data = json.load(f)
     season = data[-1]["season"]
+    print(f"Saison: {season}", flush=True)
     main_repo = f"{LOCAL_PATH}/data/saison-{season}"
 
     json_players = os.path.join(main_repo, "players.json")
