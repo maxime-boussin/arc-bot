@@ -104,7 +104,6 @@ def update_json(players, winner, table):
     with open(json_info, "r", encoding="utf-8") as f:
         data = json.load(f)
     season = data[-1]["season"]
-    print(f"Saison: {season}", flush=True)
     main_repo = f"{LOCAL_PATH}/data/saison-{season}"
 
     json_players = os.path.join(main_repo, "players.json")
@@ -125,7 +124,7 @@ def update_json(players, winner, table):
         data = json.load(f)
     for param in data:
         for duel in param.get("matches"):
-            if sorted(duel.get("opponents")) == sorted([player1.get("id"), player2.get("id")]) and duel.get("winner") == 0:
+            if sorted(duel.get("opponents")) == sorted([player1.get("id"), player2.get("id")]):
                 if duel.get("winner") == 0:
                     duel["winner"] = winner.get("id")
                     duel["link"] = table
@@ -175,7 +174,6 @@ def update_json(players, winner, table):
         print("commit et pushed", flush=True)
     else:
         print(f"Rien à commit", flush=True)
-
     return [[player1, player2], message]
 
 
