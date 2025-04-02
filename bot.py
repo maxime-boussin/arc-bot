@@ -42,13 +42,17 @@ async def on_ready():
 
 @bot.command()
 async def match(ctx, url: str):
+    print(f"Commande reçu: !match {url}", flush=True)
     message = await scrapeBga(url)
+    print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 @bot.command()
 async def matchIRL(ctx, player1: str, player2: str, winner: int):
+    print(f"Commande reçu: !matchIRL {player1} {player2} {winner}", flush=True)
     winner = winner - 1
     message = await setMatch([player1, player2], winner)
+    print(f"Message: {message}", flush=True)
     await ctx.send(message)
 
 async def scrapeBga(url):
@@ -174,6 +178,7 @@ def update_json(players, winner, table):
         print("commit et pushed", flush=True)
     else:
         print(f"Rien à commit", flush=True)
+    
     return [[player1, player2], message]
 
 
