@@ -111,8 +111,10 @@ def update_json(players, winner, table):
         data = json.load(f)
     season = data[-1]["season"]
     main_repo = f"{LOCAL_PATH}/data/saison-{season}"
-
+    json_tournament = os.path.join(main_repo, "tournament.json")
+    json_groups = os.path.join(main_repo, "groups.json")
     json_players = os.path.join(main_repo, "players.json")
+
     with open(json_players, "r", encoding="utf-8") as f:
         data = json.load(f)
     player1 = next((item for item in data if item.get("bga") == players[0]), None)
@@ -124,7 +126,6 @@ def update_json(players, winner, table):
     if not player1 or not player2:
         return [[None, None], "Joueurs inconnus :prohibited:"]
     winner = player1 if player1.get("bga") == winner else (player1 if player1.get("name") == winner else player2)
-    json_groups = os.path.join(main_repo, "groups.json")
     match_found = False
     with open(json_groups, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -145,7 +146,6 @@ def update_json(players, winner, table):
             continue
         break
     if not match_found:
-        json_tournament = os.path.join(main_repo, "tournament.json")
         with open(json_tournament, "r", encoding="utf-8") as f:
             data = json.load(f)
         j = 0
@@ -160,7 +160,7 @@ def update_json(players, winner, table):
                         if j < len(data):
                             data[j][i // 2]["opponents"][i % 2] = winner.get("id")
                         match_found = True
-                        message = "Match du tournoi enregistré. "
+                        message = "Match du tournoi enregistré."
                         with open(json_tournament, "w", encoding="utf-8") as f:
                             json.dump(data, f, indent=4, ensure_ascii=False)
                         break
@@ -173,14 +173,18 @@ def update_json(players, winner, table):
     if not match_found and message != "Match déjà enregistré. :floppy_disk:":
         message = "Aucun match trouvé."
     if repo.is_dirty():
-        repo.git.add(json_groups.replace("\\", "/").replace("tmp/Altered-Rennes-Cup/", ""))
-        repo.git.add(json_tournament.replace("\\", "/").replace("tmp/Altered-Rennes-Cup/", ""))
-        repo.index.commit("📊 Mise à jour automatique des scores via bot Discord 🤖")
-        repo.git.push(GITHUB_REPO_URL, "main")
-        print("commit et pushed", flush=True)
+        try:
+            repo.git.add(json_groups.replace("\\", "/").replace("tmp/Altered-Rennes-Cup/", ""))
+            repo.git.add(json_tournament.replace("\\", "/").replace("tmp/Altered-Rennes-Cup/", ""))
+            repo.index.commit("📊 Mise à jour automatique des scores via bot Discord 🤖")
+            repo.git.push(GITHUB_REPO_URL, "main")
+            print("commit et pushed", flush=True)
+        except:
+            message = "Erreur lors de l'enregistrement des données sur le serveur distant."
+            print("Erreur lors du push", flush=True)
     else:
         print(f"Rien à commit", flush=True)
-    
+
     return [[player1, player2], message]
 
 
